@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+    文章详情
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+<!-- 文章详情 -->
+<div class="container">
+    <div class="row">
+        <div class="col-12 alert alert-success">
+            <a href="#" onclick="confirm_delete()">删除文章</a>
+            · <a href="{% url "question:question_update" question.id %}">编辑文章</a>
+        </div>
+        <!-- 标题及作者 -->
+        <h1 class="col-12 mt-4 mb-4">{{ question.title }}</h1>
+        <div class="col-12 alert alert-success">标题：{{ question.tag }}</div>
+        <!-- 文章正文 -->
+        <div class="col-12">
+            {% for paragraph in question.contents %}
+                <p>{{ paragraph }}
+                </p>
+            {% endfor %}
+            <a href="{% url "article:article_detail" question.url_object_id %}">原文链接</a>
+        </div>
+    </div>
+</div>
+<script>
+    // 删除文章的函数
+    function confirm_delete() {
+        // 调用layer弹窗组件
+        layer.open({
+            // 弹窗标题
+            title: "确认删除",
+            // 正文
+            content: "确认删除这篇文章吗？",
+            // 点击确定按钮后调用的回调函数
+            yes: function(index, layero) {
+                // 指定应当前往的 url
+                location.href='{% url "question:question_delete" question.id %}'
+            },
+        })
+    }
+</script>
+{% endblock content %}
+</body>
+</html>
